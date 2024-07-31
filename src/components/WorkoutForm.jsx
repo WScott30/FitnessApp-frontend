@@ -11,7 +11,7 @@ const WorkoutForm = ({ fetchWorkouts }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('/api/workouts', workout);
+    await axios.post('http://localhost:3000/api/workouts', workout);
     fetchWorkouts();
   };
 

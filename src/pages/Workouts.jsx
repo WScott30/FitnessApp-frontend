@@ -8,7 +8,7 @@ const Workouts = () => {
   const [workouts, setWorkouts] = useState([]);
 
   const fetchWorkouts = async () => {
-    const response = await axios.get('/api/workouts');
+    const response = await axios.get('http://localhost:3000/api/workouts');
     setWorkouts(response.data);
   };
 

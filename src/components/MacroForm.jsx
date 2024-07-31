@@ -11,7 +11,7 @@ const MacroForm = ({ fetchMacros }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('/api/macros', macro);
+    await axios.post('http://localhost:3000/api/macros', macro);
     fetchMacros();
   };
 

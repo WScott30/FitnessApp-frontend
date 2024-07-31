@@ -8,7 +8,7 @@ const Macros = () => {
   const [macros, setMacros] = useState([]);
 
   const fetchMacros = async () => {
-    const response = await axios.get('/api/macros');
+    const response = await axios.get('http:localhost:3000/api/macros');
     setMacros(response.data);
   };
 

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const MacroList = ({ macros, fetchMacros }) => {
   const handleDelete = async (id) => {
-    await axios.delete(`/api/macros/${id}`);
+    await axios.delete(`http://localhost:3000//api/macros/${id}`);
     fetchMacros();
   };
 
