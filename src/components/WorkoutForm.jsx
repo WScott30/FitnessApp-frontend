@@ -1,42 +1,53 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { TextField, Button } from '@mui/material';
+// WorkoutForm.jsx
+import  { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { TextField, Button, Box } from '@mui/material';
 
-const WorkoutForm = ({ fetchWorkouts }) => {
-  const [workout, setWorkout] = useState({ type: '', duration: '' });
+const WorkoutForm = () => {
+  const { handleSubmit } = useOutletContext();
+  const [workout, setWorkout] = useState({ type: '', duration: '', date: '' });
 
   const handleChange = (e) => {
     setWorkout({ ...workout, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:3000/api/workouts', workout);
-    fetchWorkouts();
+    handleSubmit(workout);
+    setWorkout({ type: '', duration: '', date: '' }); // Reset form
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="Workout Type"
-        name="type"
-        value={workout.type}
-        onChange={handleChange}
-        margin="normal"
-        fullWidth
-      />
-      <TextField
-        label="Duration"
-        name="duration"
-        type="number"
-        value={workout.duration}
-        onChange={handleChange}
-        margin="normal"
-        fullWidth
-      />
-      <Button type="submit" variant="contained" color="primary">
-        Add Workout
-      </Button>
+    <form onSubmit={onSubmit}>
+      <Box display="flex" flexDirection="column" gap={2}>
+        <TextField
+          label="Workout Type"
+          name="type"
+          value={workout.type}
+          onChange={handleChange}
+          required
+        />
+        <TextField
+          label="Duration (minutes)"
+          name="duration"
+          type="number"
+          value={workout.duration}
+          onChange={handleChange}
+          required
+        />
+        <TextField
+          label="Date"
+          name="date"
+          type="date"
+          value={workout.date}
+          onChange={handleChange}
+          InputLabelProps={{ shrink: true }}
+          required
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Add Workout
+        </Button>
+      </Box>
     </form>
   );
 };

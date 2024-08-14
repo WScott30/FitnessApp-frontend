@@ -1,26 +1,46 @@
-import React from 'react';
-import { List, ListItem, ListItemText, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { List, ListItem, ListItemText, Typography, Box } from '@mui/material';
 
-const MacroList = ({ macros, fetchMacros }) => {
-  const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:3000//api/macros/${id}`);
-    fetchMacros();
-  };
-
+const MacroList = ({ meals, totalMacros }) => {
   return (
-    <List>
-      {macros.map((macro) => (
-        <ListItem key={macro._id}>
-          <ListItemText primary={`Protein: ${macro.protein}g, Carbs: ${macro.carbs}g, Fats: ${macro.fats}g`} />
-          <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(macro._id)}>
-            <DeleteIcon />
-          </IconButton>
-        </ListItem>
-      ))}
-    </List>
+    <Box>
+      <Typography variant="h6" gutterBottom>
+        Meals:
+      </Typography>
+      <List>
+        {meals.map((meal, index) => (
+          <ListItem key={index}>
+            <ListItemText 
+              primary={meal.name} 
+              secondary={`Protein: ${meal.protein}g, Carbs: ${meal.carbs}g, Fat: ${meal.fat}g`} 
+            />
+          </ListItem>
+        ))}
+      </List>
+      <Typography variant="h6" gutterBottom>
+        Total Macros:
+      </Typography>
+      <Typography>
+        Protein: {totalMacros.protein}g, Carbs: {totalMacros.carbs}g, Fat: {totalMacros.fat}g
+      </Typography>
+    </Box>
   );
+};
+
+MacroList.propTypes = {
+  meals: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      protein: PropTypes.number.isRequired,
+      carbs: PropTypes.number.isRequired,
+      fat: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  totalMacros: PropTypes.shape({
+    protein: PropTypes.number.isRequired,
+    carbs: PropTypes.number.isRequired,
+    fat: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default MacroList;

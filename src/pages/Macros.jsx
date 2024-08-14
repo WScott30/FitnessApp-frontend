@@ -1,30 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import  { useState, useEffect } from 'react';
+import { Container, Typography } from '@mui/material';
 import MacroForm from '../components/MacroForm';
 import MacroList from '../components/MacroList';
-import { Container, Typography } from '@mui/material';
 
-const Macros = () => {
-  const [macros, setMacros] = useState([]);
-
-  const fetchMacros = async () => {
-    const response = await axios.get('http:localhost:3000/api/macros');
-    setMacros(response.data);
-  };
+const MacroCounter = () => {
+  const [meals, setMeals] = useState([]);
+  const [totalMacros, setTotalMacros] = useState({ protein: 0, carbs: 0, fat: 0 });
 
   useEffect(() => {
-    fetchMacros();
-  }, []);
+    const calculateTotalMacros = () => {
+      const totals = meals.reduce((acc, meal) => {
+        acc.protein += meal.protein;
+        acc.carbs += meal.carbs;
+        acc.fat += meal.fat;
+        return acc;
+      }, { protein: 0, carbs: 0, fat: 0 });
+      setTotalMacros(totals);
+    };
+    calculateTotalMacros();
+  }, [meals]);
+
+  const addMeal = (newMeal) => {
+    setMeals([...meals, newMeal]);
+  };
+
 
   return (
-    <Container>
+    <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
-        Macros
+        Macro Counter
       </Typography>
-      <MacroForm fetchMacros={fetchMacros} />
-      <MacroList macros={macros} fetchMacros={fetchMacros} />
+      <MacroForm onAddMeal={addMeal} />
+      <MacroList meals={meals} totalMacros={totalMacros} />
     </Container>
   );
 };
 
-export default Macros;
+export default MacroCounter;

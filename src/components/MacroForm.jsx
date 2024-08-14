@@ -1,54 +1,76 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { TextField, Button } from '@mui/material';
+// src/containers/MacroTracker/MacroForm.jsx
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { TextField, Button, Box } from '@mui/material';
 
-const MacroForm = ({ fetchMacros }) => {
-  const [macro, setMacro] = useState({ protein: '', carbs: '', fats: '' });
+const MacroForm = ({ onAddMeal }) => {
+  const [newMeal, setNewMeal] = useState({ name: '', protein: 0, carbs: 0, fat: 0 });
 
-  const handleChange = (e) => {
-    setMacro({ ...macro, [e.target.name]: e.target.value });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewMeal({ ...newMeal, [name]: name === 'name' ? value : Number(value) });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:3000/api/macros', macro);
-    fetchMacros();
+    if (newMeal.name && (newMeal.protein > 0 || newMeal.carbs > 0 || newMeal.fat > 0)) {
+      onAddMeal(newMeal);
+      setNewMeal({ name: '', protein: 0, carbs: 0, fat: 0 });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <TextField
-        label="Protein"
-        name="protein"
-        type="number"
-        value={macro.protein}
-        onChange={handleChange}
-        margin="normal"
-        fullWidth
-      />
-      <TextField
-        label="Carbs"
-        name="carbs"
-        type="number"
-        value={macro.carbs}
-        onChange={handleChange}
-        margin="normal"
-        fullWidth
-      />
-      <TextField
-        label="Fats"
-        name="fats"
-        type="number"
-        value={macro.fats}
-        onChange={handleChange}
-        margin="normal"
-        fullWidth
-      />
-      <Button type="submit" variant="contained" color="primary">
-        Add Macro
-      </Button>
+      <Box mb={2}>
+        <TextField
+          label="Meal Name"
+          name="name"
+          value={newMeal.name}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Protein (g)"
+          name="protein"
+          type="number"
+          value={newMeal.protein}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Carbs (g)"
+          name="carbs"
+          type="number"
+          value={newMeal.carbs}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Fat (g)"
+          name="fat"
+          type="number"
+          value={newMeal.fat}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Add Meal
+        </Button>
+      </Box>
     </form>
   );
+};
+
+MacroForm.propTypes = {
+  onAddMeal: PropTypes.func.isRequired,
 };
 
 export default MacroForm;
