@@ -5,7 +5,8 @@ import Workouts from './pages/Workouts';
 import WorkoutForm from './components/WorkoutForm';
 import WorkoutList from './components/WorkoutList';
 import MacroCounter from './pages/Macros'
-
+import Login from './components/Login/Login';
+import SignUp from './components/signUp/signUp';
 function App() {
   return (
     <Router>
@@ -24,6 +25,9 @@ function App() {
           <Button color="inherit" component={Link} to="/macros">
             Macro Tracker
           </Button>
+          <Button color="inherit" component={Link} to="/Login">
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
       <Container maxWidth="lg">
@@ -32,6 +36,8 @@ function App() {
             <Grid item xs={12}>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path ="/sign-up" element={<SignUp />} />
+                <Route path ="/Login" element={<Login />} />
                 <Route path="/workouts" element={<Workouts />}>
                   <Route index element={<WorkoutList />} />
                   <Route path="new" element={<WorkoutForm />} />
